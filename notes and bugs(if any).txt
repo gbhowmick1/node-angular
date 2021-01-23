@@ -1,0 +1,69 @@
+question:- " DEPENDENCY BODY-PARSER " DO I NEED TO INCLUDE IT IN MY PROJECT?
+
+ANS:- 
+Express version 4.16+, their own body-parser implementation is now included in the default Express package 
+so there is no need for you to download another dependency.
+
+------------------------------------------------------------------------------------------------------------
+to install the previous body-parser command
+npm install --save body-parser
+to utilizes the previous body-parser package
+app.use(bodyparser.json());
+
+-------------------------------------------------------------------
+If you are using Express 4.16+ you can now replace that line with: |
+app.use(express.json()); 					   |
+								   |
+If you also have the following code in your environment:	   |
+app.use(bodyParser.urlencoded({extended: true}));	
+
+You can replace that with:
+app.use(express.urlencoded()); //Parse URL-encoded bodies	   |
+
+If u have installed the body-parser in ur project 
+and want to uninstall 
+(remove a package from the dependencies in 
+package.json - use the --save flag)
+
+npm uninstall --save <package_name>				    |
+
+npm uninstall --save body-parser				    |
+								    |
+--------------------------------------------------------------------
+
+
+Conclusion
+You might not need to install the additional body-parser package to your application 
+if you are using Express 4.16+.
+There are many tutorials that include the installation of body-parser 
+because they are dated prior to the release of Express 4.16.
+
+****************************************************************************************
+QUESTION-2 QUESTION-2 QUESTION-2 QUESTION-2 QUESTION-2 QUESTION-2 QUESTION-2 QUESTION-2
+****************************************************************************************
+
+HERE IN THE PROJECT I HAVE USED CORS(CROSS ORIGIN RESOURCE SHARING) PACKAGE TO ALLOW CROSS ORIGIN RESOUCE 
+MEANS (ANGULAR- LOCALHOST:4200 CAN ACCESS BACKEND RESOURCES LIKE- LOCALHOST:3000/API/POST)
+
+IF I DON'T USE CORS PACKAGE THEN I SHOULD HAVE WRITTEN ALL THE MIDDLEWARE LIKE
+
+app.use((req,res, next) => {
+  res.setHeader("Access-Control_Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Alow-Header", "Origin, X-Requested-With, Content-Typoe, Accept"
+    );
+    res.setHeader(
+      "Access-Control-Allow-methods",
+      "GET, POST, PATCH, DELETE, OPTIONS"
+    );
+    next();
+});
+
+
+BUG--------BUG--------BUG--------BUG--------BUG--------BUG--------
+IF I WRITE LOCALHOST:4200/EDIT/ANYTHING
+THEN APP GOES TO POSTCREATECOMPONENT AND IF I TRY TO SAVE THE POST IT DOESN'T WORK.
+WHY- GO TO EDIT FEATURE U WILL UNDERSTAND.
+
+BUG--------BUG--------BUG--------BUG--------BUG--------BUG--------
+
