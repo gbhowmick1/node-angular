@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const mongoose = require("mongoose");
 
 const postsRoutes = require("./routes/posts");
@@ -18,6 +19,8 @@ mongoose
   });
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use("/images", express.static(path.join("backend/images")));
 
 app.use(cors());
 
