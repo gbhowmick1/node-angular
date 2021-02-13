@@ -12,7 +12,7 @@ import { Post } from './post.model';
 export class PostsService {
   constructor(private http: HttpClient, private router: Router) {}
   private posts: Post[] = [];
-  public postsUpdated = new Subject<{posts: Post[],postCount:number}>();
+  public postsUpdated = new Subject<{ posts: Post[]; postCount: number }>();
 
   getPostUpdateListener() {
     return this.postsUpdated.asObservable();
@@ -27,36 +27,40 @@ export class PostsService {
     }>('http://localhost:3000/api/posts/' + id);
   }
 
-  getPosts(postsPerPage:number, currentPage:number) {
+  getPosts(postsPerPage: number, currentPage: number) {
     const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
     this.http
-      .get<{ message: string; posts: any, maxPosts:number }>('http://localhost:3000/api/posts'+queryParams)
+      .get<{ message: string; posts: any; maxPosts: number }>(
+        'http://localhost:3000/api/posts' + queryParams
+      )
       .pipe(
-        map( postData => {
-          return { 
+        map((postData) => {
+          return {
             posts: postData.posts.map(
-            (post: {
-              _id: string;
-              title: string;
-              content: string;
-              imagePath: string;
-            }) => {
-              return {
-                title: post.title,
-                content: post.content,
-                id: post._id,
-                imagePath: post.imagePath,
-              };
-            }) ,
-          maxPosts: postData.maxPosts 
-        };
+              (post: {
+                _id: string;
+                title: string;
+                content: string;
+                imagePath: string;
+              }) => {
+                return {
+                  title: post.title,
+                  content: post.content,
+                  id: post._id,
+                  imagePath: post.imagePath,
+                };
+              }
+            ),
+            maxPosts: postData.maxPosts,
+          };
         })
       )
       .subscribe((transformedPostData) => {
-
         this.posts = transformedPostData.posts;
-        this.postsUpdated.next({posts: [...this.posts],
-        postCount: transformedPostData.maxPosts});
+        this.postsUpdated.next({
+          posts: [...this.posts],
+          postCount: transformedPostData.maxPosts,
+        });
       });
   }
 
@@ -100,8 +104,17 @@ export class PostsService {
   }
 
   deletePost(postId: string) {
-    return this.http
-      .delete('http://localhost:3000/api/posts/' + postId);
-     
+    return this.http.delete('http://localhost:3000/api/posts/' + postId);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
