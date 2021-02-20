@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
+const mongooseUniqueValidator = require("mongoose-unique-validator");
 
 const router = express.Router();
 
@@ -56,6 +57,7 @@ router.post("/login", (req, res, next) => {
       res.status(200).json({
         token: token,
         expiresIn: 3600000,
+        userId: fetchedUser._id
       });
     })
     .catch((err) => {
@@ -66,3 +68,4 @@ router.post("/login", (req, res, next) => {
 });
 
 module.exports = router;
+

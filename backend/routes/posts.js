@@ -37,7 +37,10 @@ router.post(
       title: req.body.title,
       content: req.body.content,
       imagePath: url + "/images/" + req.file.filename,
+      creator: req.userData.userId,
     });
+    console.log(req.userData);
+    res.status(201).json({});
 
     post.save().then((createdPost) => {
       res.status(201).json({
@@ -67,10 +70,18 @@ router.put(
       title: req.body.title,
       content: req.body.content,
       imagePath: imagePath,
+      creator: req.userData.userId
     });
-    console.log(post);
-    Post.updateOne({ _id: req.params.id }, post).then((result) => {
-      res.status(200).json({ message: "Update Successful!" });
+
+    Post.updateOne(
+      { _id: req.params.id, creator: req.userData.userId },
+      post
+    ).then((result) => {
+      if (result.nModified > 0) {
+        res.status(200).json({ message: "Update Successful!" });
+      } else {
+        res.status(401).json({ message: "User Not Authorized!" });
+      }
     });
   }
 );
@@ -80,23 +91,21 @@ router.get("", (req, res, next) => {
   const currentPage = +req.query.page;
   const postQuery = Post.find();
   let fetchedPosts;
-  if(pageSize && currentPage){
-    postQuery
-      .skip( pageSize * (currentPage - 1))
-      .limit(pageSize);
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
   postQuery
     .then((documents) => {
       fetchedPosts = documents;
       return Post.countDocuments();
-  })
-  .then(count => {
-    res.status(200).json({
-      message: "Posts Fetched Successfully",
-      posts: fetchedPosts,
-      maxPosts: count
+    })
+    .then((count) => {
+      res.status(200).json({
+        message: "Posts Fetched Successfully",
+        posts: fetchedPosts,
+        maxPosts: count,
+      });
     });
-  })
 });
 
 router.get("/:id", (req, res, next) => {
@@ -110,11 +119,15 @@ router.get("/:id", (req, res, next) => {
 });
 
 router.delete("/:id", checkAuth, (req, res, next) => {
-  console.log(req.params.id);
-  Post.deleteOne({ _id: req.params.id }).then((result) => {
-    // console.log("post Deleted");
-    res.status(200).json({ message: "Post deleted from app.js" });
-  });
+  Post.deleteOne({ _id: req.params.id, creator: req.userData.userId }).then(
+    (result) => {
+      if (result.n > 0) {
+        res.status(200).json({ message: "Post Deleted Successfully" });
+      } else {
+        res.status(401).json({ message: "Not Authorized " });
+      }
+    }
+  );
 });
 
 module.exports = router;

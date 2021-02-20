@@ -11,45 +11,50 @@ import { AuthService } from '../../auth/auth.service';
   styleUrls: ['./post-list.component.css'],
 })
 export class PostListComponent implements OnInit {
-  isLoading:boolean = true ;
+  isLoading: boolean = true;
   posts: Post[] = [];
   totalPosts = 0;
   postsPerPage = 2;
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 7, 10];
   userIsAuthenticated = false;
+  userId: string;
   private postsSub: Subscription;
   private authStatusSub: Subscription;
 
-  constructor(public postsService: PostsService, private authService: AuthService) {}
+  constructor(
+    public postsService: PostsService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-
     this.isLoading = true;
-    this.postsService.getPosts(this.postsPerPage,this.currentPage);
-    this.postsSub = this.postsService.getPostUpdateListener().subscribe((postData: {posts: Post[], postCount: number}) => {
-
-      this.totalPosts = postData.postCount;
-      this.posts = postData.posts;
-      this.isLoading = false;
-    });
+    this.postsService.getPosts(this.postsPerPage, this.currentPage);
+    this.userId = this.authService.getUserId();
+    this.postsSub = this.postsService
+      .getPostUpdateListener()
+      .subscribe((postData: { posts: Post[]; postCount: number }) => {
+        this.totalPosts = postData.postCount;
+        this.posts = postData.posts;
+        this.isLoading = false;
+      });
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
       .getAuthStatusListener()
-      .subscribe(isAuthenticated => {
-
+      .subscribe((isAuthenticated) => {
         this.userIsAuthenticated = isAuthenticated;
+        this.userId = this.authService.getUserId();
       });
   }
   onDelete(postId: string) {
-    this.postsService.deletePost(postId).subscribe( () => {
-      this.postsService.getPosts(this.postsPerPage,this.currentPage);
+    this.postsService.deletePost(postId).subscribe(() => {
+      this.postsService.getPosts(this.postsPerPage, this.currentPage);
     });
   }
 
-  onChangedPage(pageData: PageEvent){
+  onChangedPage(pageData: PageEvent) {
     this.isLoading = true;
-    this.postsService.getPosts(pageData.pageSize,pageData.pageIndex+1);
+    this.postsService.getPosts(pageData.pageSize, pageData.pageIndex + 1);
   }
 
   ngOnDestroy() {
@@ -57,9 +62,3 @@ export class PostListComponent implements OnInit {
     this.authStatusSub.unsubscribe();
   }
 }
-
-
-
-
-
-
