@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit,OnDestroy {
   form: FormGroup;
   enteredTitle = '';
   enteredContent = '';
@@ -20,14 +22,20 @@ export class PostCreateComponent implements OnInit {
   private postId: string | null = '';
   post: Post;
   isLoading = false;
-  //post: Post;
+  private authStatusSub: Subscription;
 
   constructor(
     public postsService: PostsService,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading =false;
+      }
+    );
     this.form = new FormGroup({
       title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)],
@@ -60,6 +68,7 @@ export class PostCreateComponent implements OnInit {
         this.postId = null;
       }
     });
+
   }
 
   onImagePicked(event: Event) {
@@ -68,12 +77,6 @@ export class PostCreateComponent implements OnInit {
     this.form.get('image').updateValueAndValidity();
     console.log('printing form');
     console.log(this.form);
-    // console.log('prinitng form value');
-    // console.log(this.form.value);
-    // console.log('prinitng form image');
-    // console.log(this.form.value.image);
-    // console.log('prinitng form image type');
-    // console.log(this.form.value.image.type);
     this.imageType = this.form.value.image.type;
     console.log(this.imageType);
     if (
@@ -116,5 +119,8 @@ export class PostCreateComponent implements OnInit {
     }
 
     this.form.reset();
+  }
+  ngOnDestroy(){
+    this.authStatusSub.unsubscribe()
   }
 }
