@@ -14,7 +14,7 @@ export class PostListComponent implements OnInit {
   isLoading: boolean = true;
   posts: Post[] = [];
   totalPosts = 0;
-  postsPerPage = 2;
+  postsPerPage = 7;
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 7, 10];
   userIsAuthenticated = false;
@@ -47,11 +47,14 @@ export class PostListComponent implements OnInit {
       });
   }
   onDelete(postId: string) {
-    this.postsService.deletePost(postId).subscribe(() => {
-      this.postsService.getPosts(this.postsPerPage, this.currentPage);
-    }, () => {
-      this.isLoading =false;
-    });
+    this.postsService.deletePost(postId).subscribe(
+      () => {
+        this.postsService.getPosts(this.postsPerPage, this.currentPage);
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
 
   onChangedPage(pageData: PageEvent) {
