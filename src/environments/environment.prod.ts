@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: 'api',
+  JWT_KEY: "secret_this_should_be_longer"
 };
 
 // As during heroku deploy the only node server is delivering

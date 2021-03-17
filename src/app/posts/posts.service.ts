@@ -6,9 +6,6 @@ import { Router } from '@angular/router';
 
 import { Post } from './post.model';
 
-//const BACKEND_URL = environment.apiUrl + "/posts/";
-//const BACKEND_URL = 'http://localhost:3000/api' + '/posts/';
-
 const BACKEND_URL = 'api' + '/posts/';
 
 @Injectable({
@@ -118,3 +115,10 @@ export class PostsService {
 // the angular static pages and also running the backend server
 // so there are no need of connecting to localhost....
 //so the backend url is trimmed to only api/user/... or api/post/...
+
+
+
+
+
+
+

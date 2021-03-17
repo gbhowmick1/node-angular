@@ -1,5 +1,5 @@
 const express = require('express');
-//const cors = require('cors');
+const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 
@@ -8,9 +8,8 @@ const userRoutes = require('./routes/user');
 
 const app = express();
 
-//const url = process.env.MONGO_URI;
-const url =
-  'mongodb+srv://goutam123:goutam123@goutambhowmick.pew7f.mongodb.net/node-angular?retryWrites=true&w=majority';
+const url = process.env.MONGO_URI;
+
 
 mongoose
   .connect(url, {
@@ -30,7 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/', express.static(path.join(__dirname, './angular')));
 
-//app.use(cors());
+app.use(cors());
 
 app.use('/api/posts', postsRoutes);
 app.use('/api/user', userRoutes);
