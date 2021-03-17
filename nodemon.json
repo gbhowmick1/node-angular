@@ -1,6 +1,10 @@
+//This file is for testing to local server(in my computer only)
+//In production server specify the variables in environment variables section
 {
     "env": {
         "MONGO_ATLAS_PW":"goutam123",
         "JWT_KEY": "secret_this_should_be_longer"
     }
 }
+
+

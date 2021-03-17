@@ -5,9 +5,11 @@ import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import { Post } from './post.model';
-import { environment } from '../../environments/environment';
 
-const BACKEND_URL = environment.apiUrl + '/posts/'
+//const BACKEND_URL = environment.apiUrl + "/posts/";
+//const BACKEND_URL = 'http://localhost:3000/api' + '/posts/';
+
+const BACKEND_URL = 'api' + '/posts/';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +29,7 @@ export class PostsService {
       title: string;
       content: string;
       imagePath: string;
-      creator:string
+      creator: string;
     }>(BACKEND_URL + id);
   }
 
@@ -53,7 +55,7 @@ export class PostsService {
                   content: post.content,
                   id: post._id,
                   imagePath: post.imagePath,
-                  creator: post.creator
+                  creator: post.creator,
                 };
               }
             ),
@@ -62,7 +64,7 @@ export class PostsService {
         })
       )
       .subscribe((transformedPostData) => {
-        console.log(transformedPostData)
+        //console.log(transformedPostData);
         this.posts = transformedPostData.posts;
         this.postsUpdated.next({
           posts: [...this.posts],
@@ -77,10 +79,7 @@ export class PostsService {
     postData.append('content', content);
     postData.append('image', image, title);
     this.http
-      .post<{ message: string; post: Post }>(
-        BACKEND_URL,
-        postData
-      )
+      .post<{ message: string; post: Post }>(BACKEND_URL, postData)
       .subscribe((responseData) => {
         this.router.navigate(['/']);
       });
@@ -100,15 +99,13 @@ export class PostsService {
         title: title,
         content: content,
         imagePath: image,
-        creator: null
+        creator: null,
       };
     }
 
-    this.http
-      .put(BACKEND_URL + id, postData)
-      .subscribe((response) => {
-        this.router.navigate(['/']);
-      });
+    this.http.put(BACKEND_URL + id, postData).subscribe((response) => {
+      this.router.navigate(['/']);
+    });
   }
 
   deletePost(postId: string) {
@@ -117,12 +114,7 @@ export class PostsService {
 }
 
 
-
-
-
-
-
-
-
-
-
+// As during heroku deploy the only node server is delivering
+// the angular static pages and also running the backend server
+// so there are no need of connecting to localhost....
+//so the backend url is trimmed to only api/user/... or api/post/...

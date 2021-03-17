@@ -15,11 +15,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authStatusSub = this.authService
-    .getAuthStatusListener()
-    .subscribe( authStatus => {
+      .getAuthStatusListener()
+      .subscribe((authStatus) => {
         this.isLoading = false;
-
-    });
+      });
   }
   onLogin(form: NgForm) {
     if (form.invalid) {
@@ -29,10 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login(form.value.email, form.value.password);
     form.resetForm();
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.authStatusSub.unsubscribe();
   }
-
 }
-
-

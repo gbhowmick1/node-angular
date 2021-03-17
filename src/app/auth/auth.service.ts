@@ -4,9 +4,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthData } from './auth-data.model';
-import { environment } from '../../environments/environment';
-
-const BACKEND_URL = environment.apiUrl + '/user/'
+const BACKEND_URL = 'api' + '/user/';
 
 @Injectable({
   providedIn: 'root',
@@ -36,43 +34,43 @@ export class AuthService {
   }
   createUser(email: string, password: string) {
     const authdata: AuthData = { email: email, password: password };
-    this.http
-      .post(BACKEND_URL + 'signup', authdata)
-      .subscribe((response) => {
+    this.http.post(BACKEND_URL + 'signup', authdata).subscribe(
+      (response) => {
         this.router.navigate(['/']);
-      }, error => {
+      },
+      (error) => {
         this.authStatusListener.next(false);
-      });
+      }
+    );
   }
 
   login(email: string, password: string) {
     const authdata: AuthData = { email: email, password: password };
     this.http
-      .post<{ token: string; expiresIn: number, userId: string }>(
+      .post<{ token: string; expiresIn: number; userId: string }>(
         BACKEND_URL + 'login',
         authdata
       )
-      .subscribe((response) => {
-        const token = response.token;
-        this.token = token;
-        if (token) {
-          const expiresInDuration = response.expiresIn;
-          this.setAuthTimer(expiresInDuration);
-          this.isAuthenticated = true;
-          this.userId = response.userId;
-          this.authStatusListener.next(true);
-          const now = new Date();
-          const expirationDate = new Date(
-            now.getTime() + expiresInDuration
-          );
-          console.log(expirationDate);
-          this.saveAuthData(token, expirationDate,this.userId);
-          this.router.navigate(['/']);
+      .subscribe(
+        (response) => {
+          const token = response.token;
+          this.token = token;
+          if (token) {
+            const expiresInDuration = response.expiresIn;
+            this.setAuthTimer(expiresInDuration);
+            this.isAuthenticated = true;
+            this.userId = response.userId;
+            this.authStatusListener.next(true);
+            const now = new Date();
+            const expirationDate = new Date(now.getTime() + expiresInDuration);
+            console.log(expirationDate);
+            this.saveAuthData(token, expirationDate, this.userId);
+            this.router.navigate(['/']);
+          }
+        },
+        (error) => {
+          this.authStatusListener.next(false);
         }
-      },
-      error => {
-        this.authStatusListener.next(false);
-      }
       );
   }
 
@@ -80,16 +78,16 @@ export class AuthService {
     this.token = null;
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
-    this.userId= null;
+    this.userId = null;
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
     this.router.navigate(['/']);
   }
 
-  private saveAuthData(token: string, expirationDate: Date, userId:string) {
+  private saveAuthData(token: string, expirationDate: Date, userId: string) {
     localStorage.setItem('token', token);
     localStorage.setItem('expiration', expirationDate.toISOString());
-    localStorage.setItem('userId',userId);
+    localStorage.setItem('userId', userId);
   }
 
   private clearAuthData() {
@@ -100,12 +98,12 @@ export class AuthService {
 
   autoAuthUser() {
     const authInformation = this.getAuthData();
-    if(authInformation){
+    if (authInformation) {
       const now = new Date();
       const expiresIn =
         authInformation.expirationDate.getTime() - now.getTime();
-        console.log(authInformation, expiresIn)
-        if (expiresIn > 0) {
+      console.log(authInformation, expiresIn);
+      if (expiresIn > 0) {
         this.token = authInformation.token;
         this.isAuthenticated = true;
         this.userId = authInformation.userId;
@@ -120,12 +118,11 @@ export class AuthService {
     const expirationDate = localStorage.getItem('expiration');
     const userId = localStorage.getItem('userId');
     if (!token || !expirationDate) {
-
     } else {
       return {
         token: token,
         expirationDate: new Date(expirationDate),
-        userId: userId
+        userId: userId,
       };
     }
   }
@@ -139,11 +136,7 @@ export class AuthService {
 
 
 
-
-
-
-
-
-
-
-
+// As during heroku deploy the only node server is delivering
+// the angular static pages and also running the backend server
+// so there are no need of connecting to localhost....
+//so the backend url is trimmed to only api/user/... or api/post/...

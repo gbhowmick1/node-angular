@@ -75,10 +75,9 @@ export class PostCreateComponent implements OnInit,OnDestroy {
     const file = (event.target as HTMLInputElement).files[0];
     this.form.patchValue({ image: file });
     this.form.get('image').updateValueAndValidity();
-    console.log('printing form');
-    console.log(this.form);
+
     this.imageType = this.form.value.image.type;
-    console.log(this.imageType);
+    //console.log(this.imageType);
     if (
       this.imageType == 'image/png' ||
       this.imageType == 'image/jpg' ||
@@ -88,8 +87,8 @@ export class PostCreateComponent implements OnInit,OnDestroy {
     } else {
       this.imageValid = false;
     }
-    console.log('imageValid');
-    console.log(this.imageValid);
+    //console.log('imageValid');
+    //console.log(this.imageValid);
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result as string;
