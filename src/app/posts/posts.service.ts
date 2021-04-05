@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 import { Post } from './post.model';
 
-const BACKEND_URL = 'api' + '/posts/';
+const BACKEND_URL = 'http://localhost:3000/api' + '/posts/';
 
 @Injectable({
   providedIn: 'root',
@@ -27,17 +27,20 @@ export class PostsService {
       content: string;
       imagePath: string;
       creator: string;
+      file: FileList
     }>(BACKEND_URL + id);
   }
-
+ 
   getPosts(postsPerPage: number, currentPage: number) {
     const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
     this.http
-      .get<{ message: string; posts: any; maxPosts: number }>(
+      .get<{ message: string; posts:any; maxPosts: number }>(
         BACKEND_URL + queryParams
       )
       .pipe(
         map((postData) => {
+          console.log('postData------------')
+          console.log(postData)
           return {
             posts: postData.posts.map(
               (post: {
@@ -46,13 +49,15 @@ export class PostsService {
                 content: string;
                 imagePath: string;
                 creator: string;
-              }) => {
+                file: FileList
+              }) => { 
                 return {
                   title: post.title,
                   content: post.content,
                   id: post._id,
                   imagePath: post.imagePath,
                   creator: post.creator,
+                  FileList: post.file
                 };
               }
             ),
@@ -61,11 +66,12 @@ export class PostsService {
         })
       )
       .subscribe((transformedPostData) => {
-        //console.log(transformedPostData);
+        console.log('Printing---------- ');
+        console.log(transformedPostData);
         this.posts = transformedPostData.posts;
         this.postsUpdated.next({
           posts: [...this.posts],
-          postCount: transformedPostData.maxPosts,
+          postCount: transformedPostData.maxPosts, 
         });
       });
   }
@@ -115,6 +121,15 @@ export class PostsService {
 // the angular static pages and also running the backend server
 // so there are no need of connecting to localhost....
 //so the backend url is trimmed to only api/user/... or api/post/...
+
+
+
+
+
+
+
+
+
 
 
 

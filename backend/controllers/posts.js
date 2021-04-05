@@ -1,12 +1,56 @@
 const Post = require("../models/post");
 
+const mongoose = require('mongoose');
+const path =require('path');
+const multer = require('multer');
+const crypto = require('crypto');
+const GridfsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+//const methodOverride = require('method-override');
+
+const url = 'mongodb+srv://goutam123:goutam123@goutambhowmick.pew7f.mongodb.net/node-angular?retryWrites=true&w=majority';
+
+const MIME_TYPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+};
+//Create mongo connection
+const conn = mongoose.createConnection(url,{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
+//Init gfs
+let gfs;
+conn.once('open', ()=> {
+  //Init stream
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection('uploads');
+ })
+
+ exports.getImage = (req, res) => {
+  gfs.files.findOne({filename: req.params.filename}, (err, file) => {
+      if(!file || file.length === 0){
+          return res.status(404).json({err: 'No File Exists'});
+      } else {
+          // Check if is image
+          if(file.contentType === "image/jpeg" || file.contentType === "image/png"){
+              // Read output to broswer
+              const readstream = gfs.createReadStream(file.filename);
+              readstream.pipe(res);
+          } else {
+              res.status(404).json({err: 'Not and image'});
+          }
+      }
+  });
+}
 
 exports.createPost = (req, res, next) => {
-  const url = req.protocol + "://" + req.get("host");
   const post = new Post({
     title: req.body.title,
     content: req.body.content,
-    imagePath: url + "/images/" + req.file.filename,
+    imagePath: req.file.filename,
     creator: req.userData.userId,
   });
   post.save().then((createdPost) => {
@@ -68,13 +112,15 @@ exports.getPosts = (req, res, next) => {
   postQuery
     .then((documents) => {
       fetchedPosts = documents;
-      return Post.countDocuments();
+      return Post.countDocuments(); 
     })
     .then((count) => {
-      res.status(200).json({
+      //console.log(this.files)
+      res.status(200).json({ 
         message: "Posts Fetched Successfully",
         posts: fetchedPosts,
         maxPosts: count,
+        file: this.files
       });
     })
     .catch( error => {
@@ -115,5 +161,26 @@ exports.deletePost = (req, res, next) => {
       });
     });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

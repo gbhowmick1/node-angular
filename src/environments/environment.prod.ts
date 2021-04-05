@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: 'api',
+  MONGO_URI: 'mongodb+srv://goutam123:goutam123@goutambhowmick.pew7f.mongodb.net/node-angular?retryWrites=true&w=majority',
   JWT_KEY: "secret_this_should_be_longer"
 };
 

@@ -54,7 +54,8 @@ export class PostCreateComponent implements OnInit,OnDestroy {
             title: postData.title,
             content: postData.content,
             imagePath: postData.imagePath,
-            creator: postData.creator
+            creator: postData.creator,
+            file: postData.file
           };
           this.isLoading = false;
           this.form.setValue({

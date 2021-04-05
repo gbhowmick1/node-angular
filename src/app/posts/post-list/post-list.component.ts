@@ -4,23 +4,24 @@ import { PostsService } from '../posts.service';
 import { Post } from '../post.model';
 import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from '../../auth/auth.service';
-
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.css'],
 })
 export class PostListComponent implements OnInit {
+
   isLoading: boolean = true;
   posts: Post[] = [];
   totalPosts = 0;
   postsPerPage = 7;
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 7, 10];
-  userIsAuthenticated = false;
+  userIsAuthenticated = false; 
   userId: string;
   private postsSub: Subscription;
   private authStatusSub: Subscription;
+  
 
   constructor(
     public postsService: PostsService,
@@ -67,3 +68,21 @@ export class PostListComponent implements OnInit {
     this.authStatusSub.unsubscribe();
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
