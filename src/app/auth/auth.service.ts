@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthData } from './auth-data.model';
-const BACKEND_URL = 'http://localhost:3000/api' + '/user/';
+const BACKEND_URL = '/api' + '/user/';
 
 @Injectable({
   providedIn: 'root',
@@ -136,5 +136,5 @@ export class AuthService {
 
 // As during heroku deploy the only node server is delivering
 // the angular static pages and also running the backend server
-// so there are no need of connecting to localhost....
+// so there are no need of connecting to localhost:3000/API/POSTS....
 //so the backend url is trimmed to only api/user/... or api/post/...

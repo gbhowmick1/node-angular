@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 import { Post } from './post.model';
 
-const BACKEND_URL = 'http://localhost:3000/api' + '/posts/';
+const BACKEND_URL = '/api' + '/posts/';
 
 @Injectable({
   providedIn: 'root',
