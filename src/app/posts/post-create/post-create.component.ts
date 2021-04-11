@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/auth/auth.service';
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
 })
-export class PostCreateComponent implements OnInit,OnDestroy {
+export class PostCreateComponent implements OnInit, OnDestroy {
   form: FormGroup;
   enteredTitle = '';
   enteredContent = '';
@@ -31,11 +31,11 @@ export class PostCreateComponent implements OnInit,OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
-      authStatus => {
-        this.isLoading =false;
-      }
-    );
+    this.authStatusSub = this.authService
+      .getAuthStatusListener()
+      .subscribe((authStatus) => {
+        this.isLoading = false;
+      });
     this.form = new FormGroup({
       title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)],
@@ -55,7 +55,7 @@ export class PostCreateComponent implements OnInit,OnDestroy {
             content: postData.content,
             imagePath: postData.imagePath,
             creator: postData.creator,
-            file: postData.file
+            file: postData.file,
           };
           this.isLoading = false;
           this.form.setValue({
@@ -69,7 +69,6 @@ export class PostCreateComponent implements OnInit,OnDestroy {
         this.postId = null;
       }
     });
-
   }
 
   onImagePicked(event: Event) {
@@ -120,7 +119,7 @@ export class PostCreateComponent implements OnInit,OnDestroy {
 
     this.form.reset();
   }
-  ngOnDestroy(){
-    this.authStatusSub.unsubscribe()
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
   }
 }

@@ -63,7 +63,7 @@ export class AuthService {
             this.authStatusListener.next(true);
             const now = new Date();
             const expirationDate = new Date(now.getTime() + expiresInDuration);
-            console.log(expirationDate);
+            // console.log(expirationDate);
             this.saveAuthData(token, expirationDate, this.userId);
             this.router.navigate(['/']);
           }
@@ -102,7 +102,7 @@ export class AuthService {
       const now = new Date();
       const expiresIn =
         authInformation.expirationDate.getTime() - now.getTime();
-      console.log(authInformation, expiresIn);
+      // console.log(authInformation, expiresIn);
       if (expiresIn > 0) {
         this.token = authInformation.token;
         this.isAuthenticated = true;
@@ -133,8 +133,6 @@ export class AuthService {
     }, duration);
   }
 }
-
-
 
 // As during heroku deploy the only node server is delivering
 // the angular static pages and also running the backend server

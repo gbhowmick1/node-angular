@@ -27,20 +27,20 @@ export class PostsService {
       content: string;
       imagePath: string;
       creator: string;
-      file: FileList
+      file: FileList;
     }>(BACKEND_URL + id);
   }
- 
+
   getPosts(postsPerPage: number, currentPage: number) {
     const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
     this.http
-      .get<{ message: string; posts:any; maxPosts: number }>(
+      .get<{ message: string; posts: any; maxPosts: number }>(
         BACKEND_URL + queryParams
       )
       .pipe(
         map((postData) => {
-          console.log('postData------------')
-          console.log(postData)
+          //console.log('postData------------');
+          // console.log(postData);
           return {
             posts: postData.posts.map(
               (post: {
@@ -49,15 +49,15 @@ export class PostsService {
                 content: string;
                 imagePath: string;
                 creator: string;
-                file: FileList
-              }) => { 
+                file: FileList;
+              }) => {
                 return {
                   title: post.title,
                   content: post.content,
                   id: post._id,
                   imagePath: post.imagePath,
                   creator: post.creator,
-                  FileList: post.file
+                  FileList: post.file,
                 };
               }
             ),
@@ -66,12 +66,12 @@ export class PostsService {
         })
       )
       .subscribe((transformedPostData) => {
-        console.log('Printing---------- ');
-        console.log(transformedPostData);
+        // console.log('Printing---------- ');
+        // console.log(transformedPostData);
         this.posts = transformedPostData.posts;
         this.postsUpdated.next({
           posts: [...this.posts],
-          postCount: transformedPostData.maxPosts, 
+          postCount: transformedPostData.maxPosts,
         });
       });
   }
@@ -88,7 +88,7 @@ export class PostsService {
       });
   }
 
-  updatePost(id: string, title: string, content: string, image: File | string) {
+  updatePost(id: string, title: string, content: string, image: File) {
     let postData: any;
     if (typeof image === 'object') {
       postData = new FormData();
@@ -116,24 +116,7 @@ export class PostsService {
   }
 }
 
-
 // As during heroku deploy the only node server is delivering
 // the angular static pages and also running the backend server
 // so there are no need of connecting to localhost....
 //so the backend url is trimmed to only api/user/... or api/post/...
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
