@@ -14,8 +14,8 @@ const url =
 
 mongoose
   .connect(url, {
-    useNewUrlParser: true,
     useUnifiedTopology: true,
+    useNewUrlParser: true,
     useCreateIndex: true,
   })
   .then(() => {
@@ -28,15 +28,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use('/', express.static(path.join(__dirname, './angular')));
+// app.use('/', express.static(path.join(__dirname, './angular')));
 
-app.use(cors());
+// app.get("/", (req,res)=>{
+//   res.send("Hello...")
+// })
+app.use(cors()); 
 
 app.use('/api/posts', postsRoutes);
 app.use('/api/user', userRoutes);
-app.use((req, res, next) => {
-  res.sendFile(path.join(__dirname, 'angular', 'index.html'));
-});
+
+
+
+
+// app.use((req, res, next) => {
+//   res.sendFile(path.join(__dirname, 'angular', 'index.html'));
+// });
 
 module.exports = app;
 

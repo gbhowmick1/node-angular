@@ -51,6 +51,7 @@ exports.getImage = (req, res) => {
 };
 
 exports.createPost = (req, res, next) => {
+  
   const post = new Post({
     title: req.body.title,
     content: req.body.content,

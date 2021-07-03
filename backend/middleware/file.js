@@ -32,9 +32,10 @@ const storage = new GridfsStorage({
   url:
     'mongodb+srv://goutam123:goutam123@goutambhowmick.pew7f.mongodb.net/node-angular?retryWrites=true&w=majority',
   file: (req, file) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => { 
       crypto.randomBytes(16, (err, buf) => {
         if (err) {
+          console.log(err);
           return reject(err);
         }
         const filename = buf.toString('hex') + path.extname(file.originalname);

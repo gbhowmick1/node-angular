@@ -5,13 +5,13 @@ import { Post } from '../post.model';
 import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from '../../auth/auth.service';
 @Component({
-  selector: 'app-post-list',
+  selector: 'app-post-list', 
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.css'],
 })
 export class PostListComponent implements OnInit {
 
-  isLoading: boolean = true;
+  isLoading: boolean = true; 
   posts: Post[] = [];
   totalPosts = 0;
   postsPerPage = 7;
@@ -21,6 +21,7 @@ export class PostListComponent implements OnInit {
   userId: string;
   private postsSub: Subscription;
   private authStatusSub: Subscription;
+  BACKEND_URL = 'https://backend-goutam-mean-stack.herokuapp.com';
   
 
   constructor(

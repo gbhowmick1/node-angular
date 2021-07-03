@@ -22,7 +22,7 @@ import { PostsModule } from './posts/posts.module';
     ErrorComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,

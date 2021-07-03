@@ -6,11 +6,11 @@ import { Router } from '@angular/router';
 
 import { Post } from './post.model';
 
-const BACKEND_URL = '/api' + '/posts/';
-
+// const BACKEND_URL = 'http://localhost:3000/api' + '/posts/';
+const BACKEND_URL = 'https://backend-goutam-mean-stack.herokuapp.com/api' + '/posts/';
 @Injectable({
   providedIn: 'root',
-})
+}) 
 export class PostsService {
   constructor(private http: HttpClient, private router: Router) {}
   private posts: Post[] = [];

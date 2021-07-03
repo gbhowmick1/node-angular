@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthData } from './auth-data.model';
-const BACKEND_URL = '/api' + '/user/';
+// const BACKEND_URL = 'http://localhost:3000/api' + '/user/';
+const BACKEND_URL = 'https://backend-goutam-mean-stack.herokuapp.com/api' + '/user/';
 
 @Injectable({
   providedIn: 'root',
